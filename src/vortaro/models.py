@@ -46,6 +46,11 @@ class Anlam_ozellik(models.Model):
     ozellik_id = models.ForeignKey(Ozellik, on_delete=models.CASCADE)
 
 
+class Yazar(models.Model):
+    ekno = models.IntegerField(null=False)
+    kisa_adi = models.TextField(null=False)
+    tam_adi = models.TextField(null=False)
+
 class Ornek(models.Model):
     anlam_id = models.ForeignKey(Anlam, on_delete=models.CASCADE)
     kac = models.IntegerField(null=False)
@@ -53,12 +58,6 @@ class Ornek(models.Model):
     ornek = models.TextField()
     yazar_id = models.ForeignKey(Yazar, on_delete=models.CASCADE)
     yazar_vd = models.TextField()
-
-
-class Yazar(models.Model):
-    ekno = models.IntegerField(null=False)
-    kisa_adi = models.TextField(null=False)
-    tam_adi = models.TextField(null=False)
 
 
 class Atasozu(models.Model):
