@@ -67,6 +67,9 @@ class Madde(models.Model):
         managed = False
         db_table = 'madde'
 
+    def __str__(self):
+        return self.madde
+
 
 class MaddeAtasozu(models.Model):
     madde = models.ForeignKey(Madde, models.DO_NOTHING)
