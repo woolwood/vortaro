@@ -1,5 +1,13 @@
-{% for headword in headwords %}
-    <p>
-        {{ headword.madde }}
-    </p>
-{% endfor %}
+        {% for headword in headword %}
+            <h1>{{forloop.counter}}. {{headword.madde}}</h1>
+            <p>
+                {{headword.kac}} {{headword.anlam_say}}:
+                Meaning:
+                <ol>
+                    {% for anlam in headword.anlam_set.all %}
+                        <li>{{anlam.anlam}} {{anlam.fiil}}</li>
+                    {% endfor %}
+                </ol>
+                / Pronunciation: {{headword.telaffuz}}
+            </p>
+        {% endfor %}
