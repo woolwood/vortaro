@@ -11,8 +11,8 @@ def get_madde(request, query_term):
     """
     Look up a headword by exact match.
     """
-    headword = Madde.objects.filter(madde__iexact=query_term).prefetch_related("anlam_set")
-    return render(request, 'vortaro/madde.html', {'headword': headword})
+    headwords = Madde.objects.filter(madde__iexact=query_term).prefetch_related("anlam_set")
+    return render(request, 'vortaro/madde.html', {'headwords': headwords})
 
 # def query_madde(request, query_term):
 #     """
@@ -26,9 +26,6 @@ def get_madde(request, query_term):
 
 def index(request):
     all_headwords = Madde.objects.all().exclude(madde__isnull=True).exclude(madde__exact='').order_by('madde')
-    #all_headwords = Madde.objects.all().prefetch_related('anlam_set')
-    #all_meanings = Madde.objects.prefetch_related('anlam_set').all()
-
     return render(request, 'vortaro/index.html', {'all_headwords': all_headwords})
 
 
