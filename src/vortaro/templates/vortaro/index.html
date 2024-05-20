@@ -17,7 +17,7 @@
 </section>
 
 <form class="form-inline my-2 my-lg-0" action="{% url 'index' %}">    <input class="form-control mr-sm-2" type="search"   placeholder="Search" aria-label="Search" name="search">    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button></form>
-
+{% if headwords %}
     <article>
         {% for headword in headwords %}
             <h1>{{headword.madde}}</h1>
@@ -32,5 +32,10 @@
                 </p>
         {% endfor %}
     </article>
+{% endif %}
+
+{% if err_msg %}
+<p>{{err_msg}}</p>
+{% endif %}
 
 {% endblock %}

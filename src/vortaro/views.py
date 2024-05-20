@@ -1,3 +1,4 @@
+import django.db
 from django.shortcuts import render
 
 # Create your views here.
@@ -34,19 +35,25 @@ def index(request):
     # preserving the pre-sorted order in the final queryset.
     # Allows us to display most relevant matches first.
     if query_term:
-        exact_query = (Madde.objects.filter(madde__iexact=query_term)
-                       .order_by('madde')
-                       .prefetch_related("anlam_set"))
-        startswith_query = (Madde.objects.filter(madde__istartswith=query_term)
-                            .exclude(pk__in=exact_query)
-                            .order_by(Lower('madde').asc())
-                            .prefetch_related("anlam_set"))
-        contains_query = (Madde.objects.filter(madde__icontains=query_term)
-                          .exclude(pk__in=exact_query)
-                          .exclude(pk__in=startswith_query)
-                          .order_by(Lower('madde').asc())
-                          .prefetch_related("anlam_set"))
-        headwords = itertools.chain(exact_query, startswith_query, contains_query)
-        return render(request, 'vortaro/index.html', {'headwords': headwords})
+        try:
+            exact_query = (Madde.objects.filter(madde__iexact=query_term)
+                           .order_by('madde')
+                           .prefetch_related("anlam_set"))
+            startswith_query = (Madde.objects.filter(madde__istartswith=query_term)
+                                .exclude(pk__in=exact_query)
+                                .order_by(Lower('madde').asc())
+                                .prefetch_related("anlam_set"))
+            contains_query = (Madde.objects.filter(madde__icontains=query_term)
+                              .exclude(pk__in=exact_query)
+                              .exclude(pk__in=startswith_query)
+                              .order_by(Lower('madde').asc())
+                              .prefetch_related("anlam_set"))
+            headwords = itertools.chain(exact_query, startswith_query, contains_query)
+            return render(request, 'vortaro/index.html', {'headwords': headwords})
+        except django.db.OperationalError:
+            err_msg = (f"Operational error reading the database. There are probably many results for '{query_term}'. "
+                       f"Please search for a more specific query.")
+            return render(request, 'vortaro/index.html', {'err_msg': err_msg})
+
     else:
         return render(request, 'vortaro/index.html')
