@@ -15,27 +15,30 @@
         </ul>
     </p>
 </section>
-
 <form class="form-inline my-2 my-lg-0" action="{% url 'index' %}">    <input class="form-control mr-sm-2" type="search"   placeholder="Search" aria-label="Search" name="search">    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button></form>
+
+
 {% if headwords %}
-    <article>
-        {% for headword in headwords %}
-            <h1>{{headword.madde}}</h1>
-                <p>
-                    Meaning:
-                        <ol>
-                            {% for meaning in headword.anlam_set.all %}
-                                <li>{{meaning.anlam}}</li>
-                            {% endfor %}
-                        </ol>
-                    Pronunciation: {{headword.telaffuz}}
-                </p>
-        {% endfor %}
-    </article>
+    <section>
+    {% for headword in headwords %}
+        <h1><a href="{% url 'madde' query_term=headword %}">{{headword.madde}}</a></h1>
+            <p>
+                Meaning:
+                <ol>
+                {% for meaning in headword.anlam_set.all %}
+                    <li>{{meaning.anlam}}</li>
+                {% endfor %}
+                </ol>
+                Pronunciation: {{headword.telaffuz}}
+            </p>
+    {% empty %}
+        <p>Your search did not return any results. Please try a different term.</p>
+    {% endfor %}
+    </section>
 {% endif %}
 
 {% if err_msg %}
-<p>{{err_msg}}</p>
+    <p>{{err_msg}}</p>
 {% endif %}
 
 {% endblock %}
