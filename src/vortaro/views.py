@@ -44,7 +44,8 @@ def index(request):
                               .order_by(Lower('madde').asc())
                               .prefetch_related("anlam_set"))
             headwords = itertools.chain(startswith_query, contains_query)
-            return render(request, 'vortaro/index.html', {'headwords': headwords})
+            return render(request, 'vortaro/index.html',
+                          {'headwords': headwords, 'query_term': query_term})
         except django.db.OperationalError:
             err_msg = (f"Operational error reading the database. There are probably many results for '{query_term}'. "
                        f"Please search for a more specific query.")
@@ -52,3 +53,6 @@ def index(request):
 
     else:
         return render(request, 'vortaro/index.html')
+
+def home(request):
+    return render(request, 'vortaro/home.html')
