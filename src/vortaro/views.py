@@ -31,24 +31,19 @@ def get_madde(request, query_term):
 def index(request):
     query_term = request.GET.get('search')
 
-    # Use itertools.chain() to concatenate three separate queries,
+    # Use itertools.chain() to concatenate two separate queries,
     # preserving the pre-sorted order in the final queryset.
     # Allows us to display most relevant matches first.
     if query_term:
         try:
-            exact_query = (Madde.objects.filter(madde__iexact=query_term)
-                           .order_by('madde')
-                           .prefetch_related("anlam_set"))
             startswith_query = (Madde.objects.filter(madde__istartswith=query_term)
-                                .exclude(pk__in=exact_query)
                                 .order_by(Lower('madde').asc())
                                 .prefetch_related("anlam_set"))
             contains_query = (Madde.objects.filter(madde__icontains=query_term)
-                              .exclude(pk__in=exact_query)
                               .exclude(pk__in=startswith_query)
                               .order_by(Lower('madde').asc())
                               .prefetch_related("anlam_set"))
-            headwords = itertools.chain(exact_query, startswith_query, contains_query)
+            headwords = itertools.chain(startswith_query, contains_query)
             return render(request, 'vortaro/index.html', {'headwords': headwords})
         except django.db.OperationalError:
             err_msg = (f"Operational error reading the database. There are probably many results for '{query_term}'. "
