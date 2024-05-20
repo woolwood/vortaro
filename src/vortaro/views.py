@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-
+from django.db.models import Q
 from .models import Madde
 
 def get_madde(request, query_term):
@@ -25,7 +25,10 @@ def get_madde(request, query_term):
 
 
 def index(request):
-    all_headwords = Madde.objects.all().exclude(madde__isnull=True).exclude(madde__exact='').order_by('madde')
-    return render(request, 'vortaro/index.html', {'all_headwords': all_headwords})
+    return render(request, 'vortaro/index.html')
 
+def search_index(request):
+    query_term = request.GET.get('search')
+    headwords = Madde.objects.filter(madde__icontains=query_term).prefetch_related("anlam_set")
+    return render(request, 'vortaro/search_results.html', {'headwords': headwords})
 

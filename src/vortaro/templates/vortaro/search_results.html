@@ -1,0 +1,19 @@
+{% extends 'vortaro/base.html' %}
+
+{% block content %}
+<section>
+    <article>
+        {% for headword in headwords %}
+            <h1>{{forloop.counter}}. {{headword.madde}}</h1>
+                <p>
+                    Meaning:
+                        <ol>
+                            {% for meaning in headword.anlam_set.all %}
+                                <li>{{meaning.anlam}}</li>
+                            {% endfor %}
+                        </ol>
+                    Pronunciation: {{headword.telaffuz}}
+                </p>
+        {% endfor %}
+    </article>
+{% endblock %}
