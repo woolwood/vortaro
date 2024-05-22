@@ -3,13 +3,13 @@
 {% block content %}
     <article>
         {% for headword in headwords %}
-            <h1>
+            <h3>
                 {% if headword.kac > 0 %}
                     {{headword.kac}}. {{headword.madde}}
                 {% else %}
                     {{headword.madde}}
                 {% endif %}
-            </h1>
+            </h3>
                 <p>
                     Meaning:
                     <ol>

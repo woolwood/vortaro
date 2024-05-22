@@ -5,7 +5,7 @@
 {% if headwords %}
     <section>
     {% for headword in headwords %}
-        <h1><a href="{% url 'madde' query_term=headword %}">{{headword.madde}}</a></h1>
+        <h3><a href="{% url 'madde' query_term=headword %}">{{headword.madde}}</a></h3>
             <p>
                 Meaning:
                 <ol>
