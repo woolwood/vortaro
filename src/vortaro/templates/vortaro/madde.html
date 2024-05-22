@@ -3,15 +3,27 @@
 {% block content %}
     <article>
         {% for headword in headwords %}
-            <h1>{{forloop.counter}}. {{headword.madde}}</h1>
+            <h1>
+                {% if headword.kac > 0 %}
+                    {{headword.kac}}. {{headword.madde}}
+                {% else %}
+                    {{headword.madde}}
+                {% endif %}
+            </h1>
                 <p>
                     Meaning:
-                        <ol>
-                            {% for meaning in headword.anlam_set.all %}
+                    <ol>
+                        {% for meaning in headword.anlam_set.all %}
+                            {%if "►" in meaning.anlam %}
+                                <li><a href="{% url 'madde' query_term=meaning.anlam|slice:"2:" %}">{{meaning.anlam}}</a></li>
+                            {% else %}
                                 <li>{{meaning.anlam}}</li>
-                            {% endfor %}
-                        </ol>
-                    Pronunciation: {{headword.telaffuz}}
+                            {% endif %}
+                        {% endfor %}
+                    </ol>
+                    {% if headword.telaffuz %}
+                        Pronunciation note: {{headword.telaffuz}}
+                    {% endif %}
                 </p>
         {% endfor %}
     </article>

@@ -9,11 +9,17 @@
             <p>
                 Meaning:
                 <ol>
-                {% for meaning in headword.anlam_set.all %}
-                    <li>{{meaning.anlam}}</li>
-                {% endfor %}
+                    {% for meaning in headword.anlam_set.all %}
+                        {%if "►" in meaning.anlam %}
+                            <li><a href="{% url 'madde' query_term=meaning.anlam|slice:"2:" %}">{{meaning.anlam}}</a></li>
+                        {% else %}
+                            <li>{{meaning.anlam}}</li>
+                        {% endif %}
+                    {% endfor %}
                 </ol>
-                Pronunciation: {{headword.telaffuz}}
+                {% if headword.telaffuz %}
+                    Pronunciation note: {{headword.telaffuz}}
+                {% endif %}
             </p>
     {% empty %}
         <p>Your search "{{query_term}}" did not return any results. Please try a different term.</p>
